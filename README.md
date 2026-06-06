@@ -314,8 +314,7 @@ mindmap
 ## 👤 Author
 
 **Shivanshu Tiwari**  
-M.Tech, IIT Madras (Pune Campus)  
-
+M.Tech, Indian Institute of Tropical Meteorology & Defence Institute of Advanced Technology 
 ---
 
 <div align="center">
