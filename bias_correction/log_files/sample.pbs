@@ -1,0 +1,15 @@
+#!/bin/sh
+#PBS -N Appolo_job
+#PBS -l select=1:ncpus=10:ngpus=1
+#PBS -l walltime=00:30:00
+#PBS -q workq
+#PBS -l place=scatter
+#PBS -V
+
+export CUDA_VISIBLE_DEVICES="7"
+
+source /home/hpcs_rnd/anaconda3/bin/activate
+conda activate yatendra_env
+
+cd  /home/hpcs_rnd/Yatendra_IITKgp/bias_correction/npy_files/npy_files/
+python cnnbc_final.py  &> bias_cnn.log

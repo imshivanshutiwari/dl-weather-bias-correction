@@ -1,0 +1,229 @@
+# ✅ COPY THIS LIST - NOTHING ELSE!
+
+## 5 CODE FILES (Copy These - Total ~50 KB)
+
+```
+☑ train_simple.py         ← TRAINING SCRIPT (CRITICAL!)
+☑ test_CORRECTED.py       ← TESTING SCRIPT (CRITICAL!)
+☑ model_4_fixed.py        ← NEURAL NETWORK (CRITICAL!)
+☑ config.py               ← CONFIG (CRITICAL!)
+☑ cnnbc_utils.py          ← UTILITIES (CRITICAL!)
+```
+
+**All in:** `e:\iitm pune project important files\MY FILES\Bias_Correction_2025\`
+
+---
+
+## 1 DATA FOLDER (Copy This - Total ~5-6 GB)
+
+```
+☑ ../data/
+   ├── gfs model/
+   │   └── GFS_3h_JJAS_india_2019to23_filled.nc     (2-3 GB)
+   └── imdaa data truth image/
+       └── IMDAA_3h_JJAS_india_2019to23_filled.nc   (2-3 GB)
+```
+
+**Path:** `e:\iitm pune project important files\MY FILES\data\`
+
+**THIS IS REQUIRED! Don't skip!**
+
+---
+
+## OPTIONAL: 1 DOCUMENTATION FILE (~50 KB)
+
+```
+☐ LAB_TRAINING_TOMORROW.md     ← Quick reference guide
+```
+
+**Optional - helps during lab**
+
+---
+
+## ❌ DON'T COPY (Save ~10 GB):
+
+```
+✗ checkpoints/               (will be created)
+✗ figures/                   (will be created)
+✗ runs/                      (old files)
+✗ masks/                     (old files)
+✗ scales/                    (old files)
+✗ training_results_*/        (old results)
+✗ __pycache__/              (cache)
+✗ model_1.py, model_2.py... (old models)
+✗ train_cnn.py, train_bfgs.py... (old training)
+✗ TestModel.py, test_*.py... (old tests)
+✗ *.pth files               (old checkpoints)
+```
+
+---
+
+## COPY COMMANDS (Windows PowerShell)
+
+### Option 1: Copy Individual Files
+```powershell
+# Navigate to folder
+cd "e:\iitm pune project important files\MY FILES\Bias_Correction_2025"
+
+# Copy 5 Python files
+copy train_simple.py "D:\LAB_SYSTEM\"
+copy test_CORRECTED.py "D:\LAB_SYSTEM\"
+copy model_4_fixed.py "D:\LAB_SYSTEM\"
+copy config.py "D:\LAB_SYSTEM\"
+copy cnnbc_utils.py "D:\LAB_SYSTEM\"
+
+# Copy data folder (IMPORTANT!)
+xcopy "..\data" "D:\LAB_SYSTEM\data" /E /I
+
+# Copy optional documentation
+copy LAB_TRAINING_TOMORROW.md "D:\LAB_SYSTEM\"
+```
+
+Replace `D:\LAB_SYSTEM\` with your actual path!
+
+---
+
+## FILE STRUCTURE ON LAB SYSTEM
+
+After copying, you should have:
+
+```
+LAB_SYSTEM/
+├── train_simple.py         ← Use this to train
+├── test_CORRECTED.py       ← Use this to test
+├── model_4_fixed.py
+├── config.py
+├── cnnbc_utils.py
+├── LAB_TRAINING_TOMORROW.md (optional)
+│
+└── data/                   ← REQUIRED FOLDER
+    ├── gfs model/
+    │   └── GFS_3h_JJAS_india_2019to23_filled.nc
+    └── imdaa data truth image/
+        └── IMDAA_3h_JJAS_india_2019to23_filled.nc
+```
+
+---
+
+## VERIFY ON LAB SYSTEM
+
+### Check Files Exist:
+```bash
+# Should show all 5 files
+ls -la *.py
+
+# Should show 2 NetCDF files in data folder
+ls -la data/*/
+```
+
+### Check Sizes:
+```bash
+# Data files should be ~2-3 GB each
+du -h data/
+
+# Python files should be small (KB)
+du -h *.py
+```
+
+---
+
+## TOTAL STORAGE NEEDED
+
+```
+Code files:      50 KB
+Data files:      5-6 GB
+Buffer:          200 MB
+
+MINIMUM:         ~5.2 GB
+RECOMMENDED:     ~6 GB
+```
+
+---
+
+## SUMMARY TABLE
+
+| Item | Size | Copy? | Why |
+|------|------|-------|-----|
+| train_simple.py | 5 KB | ✅ | Main training |
+| test_CORRECTED.py | 8 KB | ✅ | Main testing |
+| model_4_fixed.py | 3 KB | ✅ | Neural network |
+| config.py | 1 KB | ✅ | Settings |
+| cnnbc_utils.py | 4 KB | ✅ | Helpers |
+| data/ | 5-6 GB | ✅ | REQUIRED! |
+| LAB_TRAINING_TOMORROW.md | 50 KB | ⚠️ | Optional |
+| Everything else | ~10 GB | ❌ | Skip! |
+
+---
+
+## CHECKLIST
+
+Before leaving for lab:
+
+- [ ] Copied train_simple.py
+- [ ] Copied test_CORRECTED.py
+- [ ] Copied model_4_fixed.py
+- [ ] Copied config.py
+- [ ] Copied cnnbc_utils.py
+- [ ] Copied entire data/ folder (with .nc files)
+- [ ] Verified all files exist on lab system
+- [ ] Verified data files are ~2-3 GB each
+- [ ] Optional: Copied LAB_TRAINING_TOMORROW.md
+- [ ] Ready to go! ✓
+
+---
+
+## WHAT YOU'LL DO ON LAB SYSTEM
+
+```bash
+cd LAB_SYSTEM/
+
+# Step 1: Train
+python train_simple.py
+
+# Step 2: Test  
+python test_CORRECTED.py
+
+# Step 3: View results
+# figures/BC_test_CORRECTED_2019_07_11T03.png
+```
+
+---
+
+## IF YOU FORGET SOMETHING
+
+### Forgot data folder?
+- ❌ Training won't work
+- Copy from laptop: `data/` folder (~5-6 GB)
+
+### Forgot one of the 5 .py files?
+- ❌ Script will crash
+- Copy missing file from laptop
+
+### Forgot config.py?
+- ❌ Training will crash
+- Copy from laptop
+
+### Forgot cnnbc_utils.py?
+- ❌ Training will crash
+- Copy from laptop
+
+### Forgot model_4_fixed.py?
+- ❌ Training will crash
+- Copy from laptop
+
+---
+
+## EVERYTHING READY!
+
+```
+✅ Code files identified
+✅ Data files identified
+✅ Copying instructions clear
+✅ Verification steps included
+✅ Ready for lab!
+```
+
+**Copy exactly what's listed - nothing more, nothing less!**
+
+**Total: ~5.2 GB, all set! 🚀**
+

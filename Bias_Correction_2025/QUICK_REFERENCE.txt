@@ -1,0 +1,223 @@
+# 📋 QUICK REFERENCE: Purple Map Issue
+
+```
+YOUR SYMPTOM:
+┌─────────────────────────────────┐
+│  Running bias correction test   │
+│  Output map is COMPLETELY       │
+│  PURPLE with NO variation       │
+└─────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────┐
+│  ROOT CAUSE:                            │
+│  Model output is CONSTANT               │
+│  (all pixels ≈ same value)              │
+│                                         │
+│  Reason: ONE OF THESE ⬇️               │
+└─────────────────────────────────────────┘
+
+1️⃣  MODEL NOT TRAINED
+    ❌ Checkpoint file missing
+    ❌ Using untrained weights
+    ✓ FIX: python train_simple.py
+
+2️⃣  WRONG CHECKPOINT PATH
+    ❌ Path points to wrong location
+    ❌ Or file doesn't exist
+    ✓ FIX: Run setup_check.py → fix config.py
+
+3️⃣  WRONG NORMALIZATION
+    ❌ Dividing by 400 but data is 0-100
+    ❌ Values get stuck at constant
+    ✓ FIX: Check actual data range
+
+4️⃣  WRONG DATA/CHANNELS
+    ❌ Input has 10 channels, model expects 1
+    ❌ Wrong CHW conversion
+    ✓ FIX: Verify data loading code
+
+5️⃣  MASK ALL NaN
+    ❌ Mask inverted or wrong shape
+    ❌ Entire output masked out
+    ✓ FIX: Check mask file validity
+```
+
+---
+
+## 🚀 SOLVING IN 4 STEPS
+
+```
+STEP 1: DIAGNOSE
+┌────────────────────────────────┐
+│ python setup_check.py          │
+│ → Shows missing files/paths    │
+└────────────────────────────────┘
+           │
+           ✓ Fix issues found
+           │
+           ▼
+
+STEP 2: VALIDATE
+┌────────────────────────────────┐
+│ python diagnose_purple_map.py  │
+│ → Shows exact problem          │
+└────────────────────────────────┘
+           │
+           ✓ Read ERROR/WARNING sections
+           │
+           ▼
+
+STEP 3: FIX
+Based on diagnose output:
+  • Missing checkpoint? → Train model
+  • Wrong path? → Update config.py
+  • Wrong data? → Fix file locations
+  • Bad normalization? → Update scale
+           │
+           ✓ Rerun diagnostics
+           │
+           ▼
+
+STEP 4: TEST
+┌────────────────────────────────┐
+│ python test_trained_model_...  │
+│ → Check if plot has variation  │
+└────────────────────────────────┘
+```
+
+---
+
+## 📊 DIAGNOSTIC CHECKLIST
+
+```
+CHECKPOINT:
+  [ ] File exists: checkpoints/Fixed_Model_Simple/best_model_epoch_50.pth
+  [ ] File size > 1 MB
+  [ ] Can be loaded without errors
+
+DATA:
+  [ ] GFS file found
+  [ ] IMDAA file found
+  [ ] Date '2019-07-11T03' exists in both
+  [ ] Data range is reasonable (not all NaN)
+
+NORMALIZATION:
+  [ ] Max data value ÷ 400 gives reasonable normalized values
+  [ ] Denormalized values similar to input range
+
+MASK:
+  [ ] Shape matches data (256, 256) or your grid size
+  [ ] Has both valid and invalid pixels (NaN)
+  [ ] Not inverted
+
+OUTPUT:
+  [ ] Model runs without error
+  [ ] Output std dev > 0.01 (not nearly constant)
+  [ ] Visualization shows regional variation
+```
+
+---
+
+## 🎯 KEY NUMBERS TO CHECK
+
+From `diagnose_purple_map.py` output:
+
+```
+✓ GOOD:
+  Std Dev: 12.345678  ← HIGH is good
+  NaN%: 10.0%         ← Some NaN is normal
+  Output range: 0.05 to 92.3  ← Wide range
+
+✗ BAD:
+  Std Dev: 0.000001   ← TINY = problem!
+  NaN%: 100.0%        ← All NaN = masked out
+  Output range: 42.001 to 42.003  ← All same!
+```
+
+---
+
+## 🔧 ONE-LINE FIXES
+
+```bash
+# Missing checkpoint? Train it:
+python train_simple.py
+
+# Wrong paths? Check where files really are:
+python setup_check.py
+
+# Need to see what's wrong?
+python diagnose_purple_map.py
+
+# Run improved test:
+python test_trained_model_fixed_v2.py
+
+# Debug specific date?
+# Edit date_string in test script, rerun diagnose
+```
+
+---
+
+## 📂 FILE LOCATIONS
+
+```
+YOUR PROJECT:
+e:\iitm pune project important files\MY FILES\Bias_Correction_2025\
+
+DIAGNOSTIC TOOLS (Created for you):
+  ├─ setup_check.py ← Start here
+  ├─ diagnose_purple_map.py ← Then here
+  ├─ test_trained_model_fixed_v2.py ← Then here
+  ├─ README_PURPLE_MAP_FIX.md ← Full guide
+  └─ PURPLE_MAP_SOLUTION.md ← Detailed solutions
+
+EXISTING FILES:
+  ├─ config.py ← Update paths here
+  ├─ test_trained_model_updated.py ← Original
+  ├─ model_4_fixed.py ← Model definition
+  ├─ checkpoints/ ← Look for trained models
+  ├─ figures/ ← Output plots saved here
+  └─ masks/Mask_125deg_New.npy ← Needed for masking
+
+DATA (Probably in parent directory):
+  └─ ../data/
+     ├─ gfs model/GFS_3h_JJAS_india_2019to23_filled.nc
+     └─ imdaa data truth image/IMDAA_3h_JJAS_india_2019to23_filled.nc
+```
+
+---
+
+## 💬 COMMON QUESTIONS
+
+**Q: My output is still purple after fix attempts**
+A: Rerun diagnose_purple_map.py and look for new errors
+
+**Q: How long does training take?**
+A: Quick training (~10 min), full training (~1-2 hours)
+
+**Q: Can I use existing trained model?**
+A: Yes! Copy from training_results_* folders
+
+**Q: What if date doesn't exist?**
+A: Use diagnose_purple_map.py to find valid dates
+
+**Q: How do I know if it worked?**
+A: Plot should show different colors across India (not all purple)
+
+---
+
+## 🎬 ACTION NOW
+
+1. Open PowerShell in Bias_Correction_2025 folder
+2. Type: `python setup_check.py`
+3. Read output carefully
+4. Follow instructions for any ❌ issues
+5. Type: `python diagnose_purple_map.py`
+6. Check for [ERROR] sections
+7. Fix issues found
+8. Type: `python test_trained_model_fixed_v2.py`
+9. Look at plot - should have variation!
+
+---
+
+**Last Updated:** November 12, 2025

@@ -1,0 +1,174 @@
+# 🔄 WORKFLOW FLOWCHART
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│         YOU: "My entire map is purple, not showing data"            │
+└─────────────────────────────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ STEP 1: RUN QUICK CHECK                                             │
+│ $ python setup_check.py                                             │
+└─────────────────────────────────────────────────────────────────────┘
+                                 │
+                  ┌──────────────┴──────────────┐
+                  │                             │
+            ✓ All good?               ❌ Issues found?
+                  │                             │
+                  │                    See ❌ errors:
+                  │                    - Checkpoint missing
+                  │                    - Data path wrong
+                  │                    - Mask file missing
+                  │                             │
+                  │                    FIX them ↓
+                  │                    - Train: python train_simple.py
+                  │                    - Update: config.py paths
+                  │                    - Copy: checkpoint files
+                  │                             │
+                  │                    Run setup_check.py again
+                  │                    ✓ Once all ✓
+                  │                             │
+                  └──────────────┬──────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ STEP 2: DEEP DIAGNOSTIC                                             │
+│ $ python diagnose_purple_map.py                                     │
+│                                                                      │
+│ Checks:                                                              │
+│ [1] ✓ Mask validity                                                 │
+│ [2] ✓ Data loading                                                  │
+│ [3] ✓ Label loading                                                 │
+│ [4] ✓ Normalization scale                                           │
+│ [5] ✓ Model architecture                                            │
+│ [6] ✓ Checkpoint exists                                             │
+│ [7] ✓ Inference test                                                │
+└─────────────────────────────────────────────────────────────────────┘
+                                 │
+                  ┌──────────────┴──────────────┐
+                  │                             │
+            ✓ All good?             ❌ ERROR/WARNING found?
+                  │                             │
+                  │                    See error message:
+                  │                    "Output is nearly constant"
+                  │                    "Checkpoint NOT FOUND"
+                  │                    "Data is all NaN"
+                  │                    "Mask is ALL NaN"
+                  │                             │
+                  │                    Identify fix:
+                  │                    └─ Checkpoint missing
+                  │                       → Train model
+                  │                       → Or copy existing
+                  │                    └─ Wrong data range
+                  │                       → Update scale
+                  │                    └─ Wrong paths
+                  │                       → Update config
+                  │                    └─ Bad mask
+                  │                       → Check mask file
+                  │                             │
+                  │                    Apply fix ↓
+                  │                    Rerun diagnose_purple_map.py
+                  │                    until ✓ all good
+                  │                             │
+                  └──────────────┬──────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ STEP 3: TEST VISUALIZATION                                          │
+│ $ python test_trained_model_fixed_v2.py                             │
+└─────────────────────────────────────────────────────────────────────┘
+                                 │
+                  ┌──────────────┴──────────────┐
+                  │                             │
+        ✓ Plot shows             ❌ Still all purple?
+          variation?                           │
+             (colors)                    Check diagnose output again:
+                  │                    - std dev < 0.001?
+                  │                    - Check [7] Inference Test
+                  │                    - Might need to retrain
+                  │                             │
+                  │                    OR inform me:
+                  │                    - Show diagnose_purple_map output
+                  │                    - Show your config.py
+                  │                    - Describe what you see
+                  │                             │
+                  ▼                            ▼
+            ✓✓✓ SUCCESS!              Need Expert Help
+              
+              Plot looks good!       (Share diagnostic output)
+              Regional variation
+              visible
+              No more purple!
+```
+
+---
+
+## 📍 YOU ARE HERE
+
+```
+CURRENT SITUATION:
+├─ Your script: test_trained_model_updated.py
+├─ Problem: Purple map (constant output)
+├─ Need: Root cause identification + fix
+└─ Solution: Diagnostic tools created ✓
+
+NEXT ACTION:
+├─ Run: python setup_check.py
+├─ Then: python diagnose_purple_map.py
+├─ Fix: Issues found
+└─ Test: python test_trained_model_fixed_v2.py
+```
+
+---
+
+## 🎯 SUCCESS INDICATORS
+
+✓ **You'll know it works when:**
+1. setup_check.py shows NO ❌ (or fixable ones)
+2. diagnose_purple_map.py shows NO [ERROR] lines
+3. test_trained_model_fixed_v2.py plot shows different colors
+4. Output std dev > 0.01 (not tiny)
+5. Regional patterns visible in India
+
+✗ **Signs it's still broken:**
+1. setup_check.py shows ❌ Checkpoint NOT FOUND
+2. diagnose_purple_map.py shows "Output is nearly constant"
+3. test_trained_model_fixed_v2.py plot is all purple/single color
+4. Output std dev < 0.001
+
+---
+
+## ⏱️ TIMELINE
+
+```
+5 min   → setup_check.py
++ 5 min → Fix issues found
++ 2 min → diagnose_purple_map.py
++ 5 min → Fix issues found (if any)
++ 1 min → test_trained_model_fixed_v2.py
+────────────────────
+~18 min → Should be working
+
+(+ time to train if needed: 10-120 min depending on training size)
+```
+
+---
+
+## 📞 TROUBLESHOOTING QUICK LINKS
+
+**If you see:**
+
+| Error/Issue | Solution |
+|-------------|----------|
+| "Checkpoint NOT FOUND" | Train model: `python train_simple.py` |
+| "Data is all NaN" | Fix paths in `config.py` |
+| "Output std dev: 0.000001" | Model not trained or path wrong |
+| "Mask is ALL NaN" | Check mask file - might be inverted |
+| Still purple after fixes | Run both diagnostic scripts again |
+
+---
+
+**READY? START HERE:**
+```bash
+python setup_check.py
+```

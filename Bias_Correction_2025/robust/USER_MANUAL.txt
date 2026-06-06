@@ -1,0 +1,400 @@
+================================================================================
+                    IITM PUNE BIAS CORRECTION SYSTEM
+                       GOVERNMENT OF INDIA PROJECT
+                         
+                          USER MANUAL & GUIDE
+================================================================================
+
+Author: IITM Pune - Government of India
+Version: 1.0
+Date: January 2026
+
+================================================================================
+                              TABLE OF CONTENTS
+================================================================================
+
+1. OVERVIEW
+2. SYSTEM REQUIREMENTS
+3. INSTALLATION GUIDE
+4. FILE STRUCTURE
+5. STEP-BY-STEP TRAINING GUIDE
+6. EVALUATION & VISUALIZATION
+7. TROUBLESHOOTING
+8. ARCHITECTURE DETAILS
+9. NOVELTY & RESEARCH CLAIMS
+
+================================================================================
+                              1. OVERVIEW
+================================================================================
+
+This system implements MSUA-Net (Multi-Scale U-Net with Attention) for 
+precipitation bias correction. It corrects systematic errors in NWP (Numerical
+Weather Prediction) model output using deep learning.
+
+KEY FEATURES:
+- Multi-scale feature extraction (3x3, 5x5, 7x7, 9x9 convolutions)
+- Attention mechanisms (SE, CBAM, Attention Gates, Self-Attention)
+- Graph Neural Network for spatial relationships (NOVEL!)
+- Uncertainty quantification (predicts confidence intervals)
+- ~149 million parameters (state-of-the-art capacity)
+- Production-grade training infrastructure
+
+================================================================================
+                          2. SYSTEM REQUIREMENTS
+================================================================================
+
+MINIMUM REQUIREMENTS:
+- Python 3.8 or higher
+- 16 GB RAM
+- 50 GB free disk space
+
+RECOMMENDED FOR TRAINING:
+- NVIDIA GPU with 16+ GB VRAM (RTX 3090, A100, V100)
+- CUDA 11.8 or higher
+- 32+ GB RAM
+- SSD for data loading
+
+REQUIRED PYTHON PACKAGES:
+- torch (PyTorch) >= 2.0.0
+- torch_geometric >= 2.3.0 (for GNN)
+- numpy >= 1.21.0
+- xarray >= 2023.1.0
+- netCDF4 >= 1.6.0
+- matplotlib >= 3.5.0
+- scipy >= 1.9.0
+- tensorboard >= 2.10.0
+- pyyaml >= 6.0
+
+================================================================================
+                          3. INSTALLATION GUIDE
+================================================================================
+
+STEP 1: Navigate to project directory
+---------------------------------------
+    cd "e:\iitm pune project important files\MY FILES\Bias_Correction_2025"
+
+
+STEP 2: Run environment setup (FIRST TIME ONLY)
+-------------------------------------------------
+    python robust/scripts/setup_environment.py
+
+This script will:
+    [✓] Check Python version
+    [✓] Check all required packages
+    [✓] Install missing packages automatically
+    [✓] Check GPU/CUDA availability
+    [✓] Verify PyTorch Geometric for GNN
+    [✓] Run quick validation tests
+
+
+STEP 3: If setup fails, manual installation
+---------------------------------------------
+    # Install PyTorch (GPU version)
+    pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+
+    # Install PyTorch Geometric
+    pip install torch_geometric
+
+    # Install other requirements
+    pip install -r robust/requirements.txt
+
+
+STEP 4: Verify installation
+-----------------------------
+    python robust/scripts/run_all_tests.py
+
+Expected output: "🎉 ALL TESTS PASSED!"
+
+================================================================================
+                          4. FILE STRUCTURE
+================================================================================
+
+Bias_Correction_2025/
+├── robust/                          # Main package
+│   ├── __init__.py
+│   │
+│   ├── models/                      # MODEL ARCHITECTURE
+│   │   ├── msua_net.py             # Main MSUA-Net model
+│   │   ├── attention.py            # SE, CBAM, AttentionGate, SelfAttention
+│   │   ├── residual.py             # ResidualBlock, ResidualGroup
+│   │   ├── multiscale.py           # MultiScaleFeatureExtractor
+│   │   ├── uncertainty.py          # UncertaintyHead
+│   │   └── gnn.py                  # Graph Neural Network (NOVEL!)
+│   │
+│   ├── losses/                      # LOSS FUNCTIONS
+│   │   ├── compound.py             # CompoundBiasCorrectionLoss
+│   │   ├── ssim.py                 # SSIM loss
+│   │   ├── gradient.py             # Gradient loss
+│   │   ├── focal.py                # Focal loss
+│   │   └── spectral.py             # Spectral loss
+│   │
+│   ├── data/                        # DATA LOADING
+│   │   └── datasets.py             # BiasCorrectionDataset, RobustNormalizer
+│   │
+│   ├── training/                    # TRAINING INFRASTRUCTURE
+│   │   └── trainer.py              # BiasCorrectionTrainer
+│   │
+│   ├── evaluation/                  # METRICS
+│   │   └── metrics.py              # 15+ meteorological metrics
+│   │
+│   ├── config/                      # CONFIGURATION
+│   │   └── production.yaml         # Training hyperparameters
+│   │
+│   └── scripts/                     # EXECUTABLE SCRIPTS
+│       ├── setup_environment.py    # Environment setup
+│       ├── run_all_tests.py        # Test suite
+│       ├── train.py                # Training script
+│       └── evaluate.py             # Evaluation script
+│
+└── data/                            # YOUR DATA FILES
+    ├── gfs model/
+    │   └── GFS_3h_JJAS_india_2019to23_filled.nc
+    └── imdaa data truth image/
+        └── IMDAA_3h_JJAS_india_2019to23_filled.nc
+
+================================================================================
+                     5. STEP-BY-STEP TRAINING GUIDE
+================================================================================
+
+STEP 1: Navigate to project directory
+---------------------------------------
+    cd "e:\iitm pune project important files\MY FILES\Bias_Correction_2025"
+
+
+STEP 2: (Optional) Check data paths in config
+-----------------------------------------------
+Open file: robust/config/production.yaml
+
+Verify these paths are correct:
+    nwp_path: "e:/iitm pune project important files/MY FILES/data/gfs model/GFS_3h_JJAS_india_2019to23_filled.nc"
+    obs_path: "e:/iitm pune project important files/MY FILES/data/imdaa data truth image/IMDAA_3h_JJAS_india_2019to23_filled.nc"
+
+
+STEP 3: Run all tests to verify code
+--------------------------------------
+    python robust/scripts/run_all_tests.py
+
+Wait for: "🎉 ALL TESTS PASSED!" (41 tests total)
+
+
+STEP 4: Start training
+-----------------------
+    python robust/scripts/train.py --config robust/config/production.yaml
+
+TRAINING OPTIONS:
+    --config PATH       : Configuration file (required)
+    --batch_size N      : Override batch size (default: 32)
+    --epochs N          : Override number of epochs (default: 200)
+    --lr RATE           : Override learning rate (default: 0.0001)
+    --demo              : Use synthetic data for testing
+    --resume PATH       : Resume from checkpoint
+
+EXAMPLE WITH OPTIONS:
+    python robust/scripts/train.py --config robust/config/production.yaml --batch_size 16 --epochs 100
+
+
+STEP 5: Monitor training progress
+-----------------------------------
+Option A: Watch terminal output
+    - Training loss, validation loss printed each epoch
+    - Best model saved automatically
+
+Option B: Use TensorBoard
+    tensorboard --logdir logs/robust_bc
+
+    Then open browser: http://localhost:6006
+
+
+STEP 6: Training outputs
+--------------------------
+After training, you will find:
+
+checkpoints/robust_bc/
+├── best_model.pth          # Best model checkpoint
+├── latest_checkpoint.pth   # Latest checkpoint
+├── normalizer.json         # Data normalization parameters
+├── config.yaml             # Training configuration
+└── history.json            # Training history
+
+logs/robust_bc/
+└── events.out.*            # TensorBoard logs
+
+================================================================================
+                     6. EVALUATION & VISUALIZATION
+================================================================================
+
+STEP 1: Run evaluation script
+-------------------------------
+    python robust/scripts/evaluate.py \
+        --checkpoint checkpoints/robust_bc/best_model.pth \
+        --nwp_data "path/to/GFS_data.nc" \
+        --obs_data "path/to/IMDAA_data.nc" \
+        --output_dir evaluation_results
+
+
+STEP 2: Check evaluation outputs
+----------------------------------
+evaluation_results/
+├── metrics_report.txt           # Complete text report
+├── results.json                 # Metrics in JSON format
+├── comparison_map.png           # NWP vs Corrected vs Obs
+├── skill_scores.png             # R, NSE, KGE comparison
+├── error_metrics.png            # MAE, RMSE reduction
+├── categorical_metrics.png      # POD, CSI, ETS by threshold
+├── correlation_improvement.png  # Spatial correlation maps
+└── summary_figure.png           # Single summary figure
+
+
+METRICS COMPUTED:
+-----------------
+Continuous:     MAE, RMSE, MBE, PBIAS, MAPE
+Correlation:    Pearson R, Spearman Rho, R²
+Skill Scores:   NSE, KGE, IoA
+Categorical:    POD, FAR, CSI, HSS, ETS, BIAS
+                (computed at 1mm, 5mm, 10mm, 20mm thresholds)
+Spatial:        FSS (Fractions Skill Score), SAL
+
+================================================================================
+                          7. TROUBLESHOOTING
+================================================================================
+
+PROBLEM: "No module named 'robust'"
+-----------------------------------
+SOLUTION: Make sure you're in the correct directory:
+    cd "e:\iitm pune project important files\MY FILES\Bias_Correction_2025"
+
+
+PROBLEM: "CUDA out of memory"
+------------------------------
+SOLUTION: Reduce batch size:
+    python robust/scripts/train.py --config robust/config/production.yaml --batch_size 8
+
+Or run on CPU (slower):
+    python robust/scripts/train.py --config robust/config/production.yaml --device cpu
+
+
+PROBLEM: "Unable to allocate memory for array"
+-----------------------------------------------
+SOLUTION: Your RAM is insufficient. Try:
+    1. Close other applications
+    2. Use smaller batch size
+    3. Use lazy loading (enabled by default)
+
+
+PROBLEM: "torch_geometric not found"
+--------------------------------------
+SOLUTION: Install PyTorch Geometric:
+    pip install torch_geometric
+
+
+PROBLEM: "Variable 'rf' not found in NetCDF"
+---------------------------------------------
+SOLUTION: Check variable name in your data:
+    python -c "import xarray as xr; print(xr.open_dataset('your_file.nc').data_vars)"
+    
+Then update config: variable_name: "YOUR_VARIABLE_NAME"
+
+
+PROBLEM: Training loss not decreasing
+---------------------------------------
+SOLUTIONS:
+    1. Check data normalization - make sure data looks reasonable
+    2. Try smaller learning rate: --lr 0.00001
+    3. Check for NaN values in data
+    4. Ensure input/output dimensions match
+
+================================================================================
+                       8. ARCHITECTURE DETAILS
+================================================================================
+
+MSUA-Net ARCHITECTURE:
+======================
+
+Input [B, 10, H, W]
+        ↓
+┌─────────────────────────────────────────┐
+│  MULTI-SCALE FEATURE EXTRACTOR          │
+│  (3×3, 5×5, 7×7, 9×9 parallel branches) │
+└─────────────────────────────────────────┘
+        ↓
+┌─────────────────────────────────────────┐
+│  U-NET ENCODER (4 levels)               │
+│  - DoubleConv + ResidualBlocks          │
+│  - SqueezeExcitation attention          │
+│  - MaxPool between levels               │
+└─────────────────────────────────────────┘
+        ↓
+┌─────────────────────────────────────────┐
+│  BOTTLENECK                             │
+│  - Self-Attention (Transformer-style)   │
+│  - Graph Neural Network (NOVEL!)        │
+│  - ResidualGroup                        │
+└─────────────────────────────────────────┘
+        ↓
+┌─────────────────────────────────────────┐
+│  U-NET DECODER (4 levels)               │
+│  - Upsample + Attention Gates on skips  │
+│  - DoubleConv + ResidualBlocks          │
+└─────────────────────────────────────────┘
+        ↓
+┌─────────────────────────────────────────┐
+│  UNCERTAINTY HEAD (Dual output)         │
+│  - Mean prediction (NO activation!)     │
+│  - Variance prediction (positive)       │
+└─────────────────────────────────────────┘
+        ↓
+Output: Mean [B, 1, H, W], Variance [B, 1, H, W]
+
+
+PARAMETER COUNT:
+================
+With GNN:     ~149 million parameters
+Without GNN:  ~135 million parameters
+Original:     212 thousand (broken model)
+
+================================================================================
+                    9. NOVELTY & RESEARCH CLAIMS
+================================================================================
+
+NOVEL CONTRIBUTIONS:
+====================
+
+1. HYBRID CNN-GNN ARCHITECTURE
+   "We propose MSUA-Net, a novel hybrid architecture combining convolutional
+   neural networks with graph neural networks for precipitation bias 
+   correction. The GNN component captures spatial relationships by treating
+   each grid point as a node in a graph connected to its neighbors."
+
+2. FIRST GNN FOR INDIAN MONSOON
+   "To our knowledge, this is the first application of Graph Neural Networks
+   for monsoon precipitation bias correction over the Indian domain."
+
+3. COMPREHENSIVE ATTENTION INTEGRATION
+   "Our architecture integrates four types of attention mechanisms:
+   Squeeze-Excitation for channel attention, CBAM for spatial attention,
+   Attention Gates for skip connections, and Self-Attention for global
+   context."
+
+4. MULTI-SCALE METEOROLOGICAL FEATURES
+   "The multi-scale feature extractor with 3×3, 5×5, 7×7, and 9×9 kernels
+   is specifically designed to capture weather patterns at scales from
+   local convective cells (~10km) to mesoscale systems (~100km)."
+
+5. UNCERTAINTY QUANTIFICATION
+   "The model provides uncertainty estimates through heteroscedastic
+   regression, enabling confidence intervals for operational forecasting."
+
+
+HOW TO CITE:
+=============
+"Multi-Scale U-Net with Attention and Graph Neural Network (MSUA-GNN) for
+Indian Monsoon Precipitation Bias Correction"
+IITM Pune, Government of India, 2026
+
+================================================================================
+                              END OF MANUAL
+================================================================================
+
+For questions or issues, contact the development team at IITM Pune.
+
+🇮🇳 Jai Hind! 🇮🇳

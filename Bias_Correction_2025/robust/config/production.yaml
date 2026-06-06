@@ -1,0 +1,124 @@
+# IITM Pune Bias Correction - Production Configuration
+# =====================================================
+# This is the main configuration file for training.
+# Adjust paths and hyperparameters as needed.
+
+# Experiment settings
+experiment:
+  name: "IITM_BiasCorrection_v1"
+  seed: 42
+  deterministic: true
+  description: "Production bias correction model for Indian precipitation"
+
+# Device configuration
+device: "cuda" # or "cpu"
+
+# Data configuration
+data:
+  # Paths to NetCDF files
+  nwp_path: "d:/shivanshu/MY FILES/data/gfs model/GFS_3h_JJAS_india_2019to23_filled.nc"
+  obs_path: "d:/shivanshu/MY FILES/data/imdaa data truth image/IMDAA_3h_JJAS_india_2019to23_filled.nc"
+
+  # Variable name in NetCDF
+  variable_name: "rf"
+
+  # Train/validation split by year
+  train_years: [2019, 2020, 2021, 2022]
+  val_years: [2023]
+
+  # Normalization
+  norm_method: "percentile" # percentile, zscore, minmax, log
+  lower_percentile: 1.0
+  upper_percentile: 99.0
+
+  # Data loading - OPTIMIZED for speed
+  batch_size: 16  # Increased from 4 - RTX A6000 has 48GB VRAM
+  num_workers: 0  # Set to 0 for Windows + lazy loading compatibility
+  augment: true   # Re-enabled for quality
+  cache_data: false
+
+# Model configuration
+model:
+  name: "MSUANet" # MSUANet or MSUANetLite
+  in_channels: 10 # Number of input time steps
+  out_channels: 1
+  base_filters: 64
+  num_levels: 4
+  n_residual: 2
+  use_attention: true
+  use_self_attention: true
+  uncertainty: true
+  dropout: 0.1
+
+# Loss configuration
+loss:
+  type: "compound" # compound, adaptive, curriculum, mse, mae
+  mse_weight: 1.0
+  ssim_weight: 0.3
+  gradient_weight: 0.2
+  focal_weight: 0.5
+  spectral_weight: 0.0  # Disabled: cuFFT FP16 requires power-of-2 dimensions
+  nll_weight: 0.3
+
+  # SSIM settings
+  ssim_window: 11
+  data_range: 1.0
+
+  # Focal loss settings
+  focal_gamma: 2.0
+  focal_alpha: 0.25
+  focal_threshold: 0.1
+
+# Training configuration
+training:
+  # Basic training
+  batch_size: 32
+  num_epochs: 100
+
+  # Optimizer
+  optimizer: "AdamW"
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  betas: [0.9, 0.999]
+
+  # Learning rate scheduler
+  scheduler: "CosineAnnealingWarmRestarts"
+  T_0: 10
+  T_mult: 2
+  eta_min: 0.0000001
+
+  # Warmup
+  warmup_epochs: 5
+  warmup_start_lr: 0.0000001
+
+  # Gradient handling
+  gradient_accumulation_steps: 1
+  gradient_clipping: 1.0
+  use_amp: true # Mixed precision training
+
+  # Early stopping
+  early_stopping_patience: 30
+  early_stopping_min_delta: 0.00001
+
+  # Checkpointing
+  checkpoint_dir: "checkpoints/robust_bc"
+  save_every: 5
+  keep_last: 10
+
+  # Logging
+  log_dir: "logs/robust_bc"
+  eval_every: 1
+
+# Evaluation configuration
+evaluation:
+  thresholds: [1.0, 5.0, 10.0, 20.0, 50.0] # mm thresholds for categorical metrics
+  fss_scales: [1, 3, 5, 9, 15] # Scales for FSS
+  metrics:
+    - "MAE"
+    - "RMSE"
+    - "Pearson_R"
+    - "NSE"
+    - "KGE"
+    - "POD_5mm"
+    - "CSI_5mm"
+    - "ETS_5mm"

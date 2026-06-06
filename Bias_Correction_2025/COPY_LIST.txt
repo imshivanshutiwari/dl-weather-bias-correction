@@ -1,0 +1,97 @@
+# ⚡ SUPER QUICK REFERENCE - COPY THIS
+
+## THE LIST (100% Complete)
+
+```
+COPY THESE 5 FILES:
+├── train_simple.py
+├── test_CORRECTED.py
+├── model_4_fixed.py
+├── config.py
+└── cnnbc_utils.py
+
+COPY THIS FOLDER:
+└── ../data/
+    ├── gfs model/GFS_3h_JJAS_india_2019to23_filled.nc
+    └── imdaa data truth image/IMDAA_3h_JJAS_india_2019to23_filled.nc
+
+OPTIONAL:
+├── LAB_TRAINING_TOMORROW.md
+├── GPU_AND_EPOCH_GUIDE.md
+└── EPOCH_VISUAL_GUIDE.md
+
+TOTAL: ~5.2 GB
+```
+
+---
+
+## DON'T COPY (Skip These - Saves 10 GB)
+
+```
+❌ train_*.py (all others)
+❌ test_*.py (all others)
+❌ model_1.py, model_2.py, model_3.py, model_5.py, model_cnnbc*
+❌ checkpoints/ folder
+❌ figures/ folder
+❌ runs/ folder
+❌ training_results_*/ folders
+❌ masks/ folder
+❌ scales/ folder
+❌ __pycache__/ folder
+❌ *.pth files
+```
+
+---
+
+## COPY COMMAND (Windows)
+
+```powershell
+cd "e:\iitm pune project important files\MY FILES\Bias_Correction_2025"
+
+# Copy 5 files
+copy train_simple.py "D:\LAB\"
+copy test_CORRECTED.py "D:\LAB\"
+copy model_4_fixed.py "D:\LAB\"
+copy config.py "D:\LAB\"
+copy cnnbc_utils.py "D:\LAB\"
+
+# Copy data folder
+xcopy "..\data" "D:\LAB\data" /E /I
+```
+
+Replace `D:\LAB` with your actual path!
+
+---
+
+## VERIFY ON LAB SYSTEM
+
+```bash
+# Should show all 5 files
+ls -la *.py
+
+# Should show 2 large files (~2-3 GB each)
+ls -lh data/*/
+```
+
+---
+
+## THEN IN LAB
+
+```bash
+python train_simple.py      # Train (30-50 min)
+python test_CORRECTED.py    # Test (1 min)
+# Check: figures/BC_test_CORRECTED_2019_07_11T03.png
+```
+
+---
+
+## SIZE SUMMARY
+
+```
+5 Code files:    50 KB
+Data folder:     5-6 GB
+TOTAL:          ~5.2 GB
+```
+
+**THAT'S IT! Simple, clean, ready to go! 🚀**
+

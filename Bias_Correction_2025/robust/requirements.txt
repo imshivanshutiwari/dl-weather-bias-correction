@@ -1,0 +1,39 @@
+# IITM Pune Bias Correction - Requirements
+# ==========================================
+# 
+# Run: pip install -r requirements.txt
+#
+# NOTE: Install PyTorch and PyTorch Geometric separately:
+#   1. PyTorch: https://pytorch.org/get-started/locally/
+#      pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+#
+#   2. PyTorch Geometric: https://pytorch-geometric.readthedocs.io/
+#      pip install torch_geometric
+
+# Core scientific computing
+numpy>=1.21.0
+scipy>=1.9.0
+pandas>=1.5.0
+
+# Data loading (NetCDF)
+xarray>=2023.1.0
+netCDF4>=1.6.0
+
+# Visualization
+matplotlib>=3.5.0
+
+# Configuration
+pyyaml>=6.0
+
+# Logging
+tensorboard>=2.10.0
+
+# Optional but recommended
+tqdm>=4.64.0
+
+# For geographic visualization (optional)
+# cartopy>=0.21.0
+# geopandas>=0.12.0
+
+# For experiment tracking (optional)
+# wandb>=0.13.0

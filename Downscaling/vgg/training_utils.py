@@ -1,0 +1,64 @@
+import matplotlib.pyplot as plt
+plt.switch_backend('agg')
+
+
+class EarlyStopper:
+    def __init__(self, patience=1, min_delta=0):
+        self.patience = patience
+        self.min_delta = min_delta
+        self.counter = 0
+        self.min_validation_loss = float('inf')
+
+    def early_stop(self, validation_loss):
+        if validation_loss < self.min_validation_loss:
+            self.min_validation_loss = validation_loss
+            self.counter = 0
+        elif validation_loss > (self.min_validation_loss + self.min_delta):
+            self.counter += 1
+            if self.counter >= self.patience:
+                return True
+        return False
+        
+    def early_stop_conv(self, validation_loss, training_loss):
+        if validation_loss < training_loss:
+            self.counter = 0
+        elif validation_loss > (training_loss + self.min_delta):
+            self.counter += 1
+            if self.counter >= self.patience:
+                return True
+        return False
+
+
+def plotLosses(trainloss,valloss,epochs,save_path=""):
+    plt.plot(epochs,trainloss,'b',label="Train Loss")
+    plt.plot(epochs,valloss,'r',label="Val Loss")
+    plt.title("Model loss")
+    plt.xlabel("Epochs")
+    plt.ylabel("Loss")
+    plt.legend()
+    plt.savefig(save_path+"Training_lossplot.png")
+    plt.close("all")
+    return
+    
+def plotAccuracies(trainacc,valacc,epochs,save_path=""):
+    plt.plot(epochs,trainacc,'b',label="Train Accuracy")
+    plt.plot(epochs,valacc,'r',label="Val Accuracy")
+    plt.title("Model Accuracy")
+    plt.xlabel("Epochs")
+    plt.ylabel("Accuracy")
+    plt.legend()
+    plt.savefig(save_path+"Training_Accuracyplot.png")
+    plt.close("all")
+    return
+
+
+def plotGANlosses(genloss,discloss,epochs,save_path=""):
+    plt.plot(epochs,genloss,'b',label="Gen Loss")
+    plt.plot(epochs,discloss,'r',label="Disc Loss")
+    plt.title("Model losses")
+    plt.xlabel("Epochs")
+    plt.ylabel("Loss")
+    plt.legend()
+    plt.savefig(save_path+"advTraining_lossplot.png")
+    plt.close("all")
+    return

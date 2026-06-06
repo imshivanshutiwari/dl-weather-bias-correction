@@ -1,0 +1,16 @@
+#!/bin/sh
+#PBS -N cnnbc_testjob
+#PBS -l select=1:ncpus=10:ngpus=1
+#PBS -l walltime=02:00:00
+#PBS -q workq
+#PBS -l place=scatter
+#PBS -V
+
+export CUDA_VISIBLE_DEVICES="4"
+
+source /home/hpcs_rnd/anaconda3/bin/activate
+conda activate sourav_convgru
+
+cd  /home/hpcs_rnd/George_DIAT/Bias_Correction/CNNBC/
+
+python testmodel.py  &> Log_testjob.log

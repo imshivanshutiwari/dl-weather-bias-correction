@@ -1,0 +1,74 @@
+# === Python ===
+__pycache__/
+*.pyc
+*.pyo
+
+# === Data files (large) ===
+*.npy
+*.nc
+*.csv
+*.xlsx
+*.xls
+*.h5
+*.hdf5
+*.pkl
+*.joblib
+
+# === Model weights / checkpoints ===
+*.keras
+*.pb
+*.data-*
+*.index
+*.ckpt*
+*.pth
+*.pt
+
+# === Geospatial / Shapefiles ===
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+
+# === Images & documents ===
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.pdf
+*.docx
+*.doc
+
+# === Logs ===
+*.log
+*.out
+*.e[0-9]*
+*.o[0-9]*
+
+# === Temp / OS files ===
+~*
+~$*
+*tmp*
+.DS_Store
+Thumbs.db
+
+# === Node/Gemini junk (from previous AI) ===
+node_modules/
+package.json
+package-lock.json
+patch.js
+run_thesis.bat
+
+# === AI tool directories ===
+.gsd/
+.agent/
+.agents/
+.gemini/
+
+# === Data directories ===
+data/
+wandb/
+.ipynb_checkpoints/
+
+# === W&B config ===
+wandb_config.py
